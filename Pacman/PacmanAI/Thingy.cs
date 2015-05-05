@@ -31,6 +31,7 @@ namespace PacmanAI
             else if (!isRight && isOver) { quadrant = 3; }
             else { quadrant = 4; } // isRight && !isOver
 
+
             for (int xpos = gs.Pacman.Node.CenterX * Math.Abs(1 - leftSide); xpos < 28 - gs.Pacman.Node.CenterX * leftSide; xpos++)
             {
                 for (int ypos = gs.Pacman.Node.CenterY * Math.Abs(1 - topSide); ypos < 28 - gs.Pacman.Node.CenterY * topSide; ypos++)
