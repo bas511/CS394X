@@ -57,6 +57,19 @@ namespace PacmanAI
         {
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
+        
+        public bool areThingsNormal(GameState gs)
+        {
+            bool normal = true;
+            foreach (Pacman.Simulator.Ghosts.Ghost ghost in gs.Ghosts)
+            {
+                if (ghost.Chasing && ghost.Entered && ghost.RemainingFlee > TIME_THRESHOLD)
+                {
+                    normal = false;
+                }
+            }
+            return normal;
+        }
 
         public override Direction Think(GameState gs)
         {
@@ -84,7 +97,7 @@ namespace PacmanAI
                 }
             }
 
-            if (true/*normal or ghosts are about to turn back*/)
+            if (areThingsNormal(gs))
             {
                 if (!itsAGhost)
                 {
