@@ -56,7 +56,6 @@
     <Compile Include="TestPac.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Thingy.cs" />
-    <Compile Include="ThingyNew.cs" />
     <Compile Include="TunnelPac.cs" />
   </ItemGroup>
   <ItemGroup>
