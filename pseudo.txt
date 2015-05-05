@@ -1,0 +1,31 @@
+determine quadrant number
+
+foreach ghost
+	if close to pac
+		if on the hunt
+			gtfo = true
+
+if shit's good
+	if gtfo = false
+		if quad has minimal pellets
+			eat pellets = false
+			eat the power pellet = true
+		if pellets are all gone
+			gtfo = true
+
+if eat pellets = true
+	foreach node
+		if node is a pill
+			record distance to pill
+			if distance is minimum
+				save as minimal
+	
+	return path to closest node
+	
+if eat the power pellet = true
+	foreach power pellet
+		record distance to pellet
+		if distance is minimum
+			save as minimum
+	
+	return path to minimum
