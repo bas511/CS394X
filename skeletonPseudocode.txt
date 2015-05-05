@@ -1,0 +1,46 @@
+/*
+	SKELETON PSEUDOCODE
+*/
+
+DEFINE MAGIC NUMBERS BY NEURO EVOLUTION:
+	PERSONAL_SPACE
+	GENERAL_SPACE
+	THRESHOLD_PERCENTAGE
+
+void initialize() {
+	splitIntoQuadrants();
+	defineDeadZone();
+}
+
+Direction aStar() {
+	// obviously ban entry into the DEAD ZONE
+
+	Direction dir;
+	if normal OR ghosts are about to turn back (>30 steps taken in power):
+		if quadrant completion percentage > THRESHOLD_PERCENTAGE:
+			dir = go for power pellet in quadrant
+			return dir;
+		else if quadrant completion percentage == 100%
+			dir = cycleAdvance();
+			return dir;
+			
+		if either chaser or camper are "eaten" OR no ghost is in GENERAL_SPACE:
+			dir = get pellets in quadrant closest to dead zone, be greedy	
+		else if chaser and camper are out of PERSONAL_SPACE: 
+			dir = greedy algo, avoid power pellets and corner, stay in quadrant
+		else: // it's about to go down
+			if first time:
+				dir = cycleAdvance();
+			else:
+				dir = eat power pellet in quadrant
+	else { // powered up and all good
+		if completion percentage == 100%
+			dir =cycleAdvance();
+			return dir;
+		
+		dir = greedy algo, completely disregard ghosts
+		
+	}
+	
+	return dir;
+}
