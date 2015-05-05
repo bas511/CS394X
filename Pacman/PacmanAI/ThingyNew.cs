@@ -21,6 +21,11 @@ namespace PacmanAI
 
         int quadrant = 0;
 
+        // MAGIC NUMBERS
+        int TIME_THRESHOLD = 400;
+        double PERSONAL_SPACE = 5;
+        double COMPLETION_PERCENTAGE = 0.75;
+
 		public ThingyNew() : base("ThingyNew") {
 		}
 
@@ -58,6 +63,19 @@ namespace PacmanAI
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
 
+        public bool areThingsNormal(GameState gs)
+        {
+            bool normal = true;
+            foreach (Pacman.Simulator.Ghosts.Ghost ghost in gs.Ghosts)
+            {
+                if (ghost.Chasing && ghost.Entered && ghost.RemainingFlee > TIME_THRESHOLD)
+                {
+                    normal = false;
+                }
+            }
+            return normal;
+        }
+
         public override Direction Think(GameState gs)
         {
             quadrant = 0;
@@ -75,7 +93,7 @@ namespace PacmanAI
             //This determines if there are any ghosts within pacman's space
             foreach (Pacman.Simulator.Ghosts.Ghost ghost in gs.Ghosts)
             {
-                if (getDistance(gs.Pacman.Node.X, ghost.X, gs.Pacman.Node.Y, ghost.Y) < 5/*this number is probably wrong, fyi*/)
+                if (getDistance(gs.Pacman.Node.X, ghost.X, gs.Pacman.Node.Y, ghost.Y) < PERSONAL_SPACE)
                 {
                     if (ghost.Entered && !ghost.Chasing)
                     {
@@ -84,7 +102,7 @@ namespace PacmanAI
                 }
             }
 
-            if (true/*normal or ghosts are about to turn back*/)
+            if (areThingsNormal(gs))
             {
                 if (!itsAGhost)
                 {

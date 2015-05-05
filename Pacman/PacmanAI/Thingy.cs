@@ -23,15 +23,15 @@ namespace PacmanAI
         {
             int numPellets = 0;
             int quadrant;
-            bool isRight = (gs.Pacman.Node.X >= gs.Pacman.Node.CenterX);
-            bool isOver = (gs.Pacman.Node.Y >= gs.Pacman.Node.CenterY);
+            bool isRight = (gs.Pacman.Node.X > gs.Pacman.Node.CenterX);
+            bool isOver = (gs.Pacman.Node.Y > gs.Pacman.Node.CenterY);
 
             if (isRight && isOver) { quadrant = 1; }
             else if (!isRight && isOver) { quadrant = 2; }
             else if (!isRight && isOver) { quadrant = 3; }
             else { quadrant = 4; } // isRight && !isOver
 
-
+/*
             for (int xpos = gs.Pacman.Node.CenterX * Math.Abs(1 - leftSide); xpos < 28 - gs.Pacman.Node.CenterX * leftSide; xpos++)
             {
                 for (int ypos = gs.Pacman.Node.CenterY * Math.Abs(1 - topSide); ypos < 28 - gs.Pacman.Node.CenterY * topSide; ypos++)
@@ -42,7 +42,7 @@ namespace PacmanAI
                         numPellets++;
                 }
             }
-
+*/
             return numPellets;
         }
 
@@ -50,6 +50,8 @@ namespace PacmanAI
         {
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
+
+        
 
         public override Direction Think(GameState gs)
         {
