@@ -1,0 +1,21 @@
+STRATEGY
+- parameters/magic numbers
+
+
+
+1. Full Mega Pac (Thingy)
+- personal space
+- completion percentage
+- general space
+
+2. Just Greedy, no quadrants 
+- personal space
+- general space
+
+3. "Out of Sight, Out of Mind"
+- personal space only
+
+4. Angry Mega Pac
+5. Angry Greedy Pac
+6. Angry OOSOOM PAC
+- same as 1,2,3 respectively, but add aggression when powered up

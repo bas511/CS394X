@@ -20,6 +20,7 @@ namespace PacmanAI
         bool itsAGhost = false;
 
         int quadrant = 0;
+        int q1TotalPellets, q2TotalPellets, q3TotalPellets, q4TotalPellets;
 
         // MAGIC NUMBERS
         int TIME_THRESHOLD = 400;
@@ -59,6 +60,82 @@ namespace PacmanAI
             return numPellets;
         }
 
+        public void initTotalPellets(GameState gs)
+        {
+            int numPellets = 0;
+            // debugging I found some weird values for centerX and centerY. I'm hard-coding
+            // the values into the loop now, but we can change the values later
+
+            // using quadrant assignments: 1-lowerleft, 2-lowerright, 3-upperleft, 4-upperright
+            // coordinates are RIGHT-DOWN
+
+            // quadrant 1
+            for (int x = 0; x < 14; x++)
+            {
+                for (int y = 14; y < 28; y++)
+                {
+                    Node isItAPill = null;
+                    isItAPill = gs.Map.GetNode(x, y);
+                    if (isItAPill.Type == Node.NodeType.Pill)
+                        numPellets++;
+                }
+            }
+            q1TotalPellets = numPellets;
+            numPellets = 0;
+
+            // quadrant 2
+            for (int x = 14; x < 28 ; x++)
+            {
+                for (int y = 14; y < 28; y++)
+                {
+                    Node isItAPill = null;
+                    isItAPill = gs.Map.GetNode(x, y);
+                    if (isItAPill.Type == Node.NodeType.Pill)
+                        numPellets++;
+                }
+            }
+            q2TotalPellets = numPellets;
+            numPellets = 0;
+
+            // quadrant 3
+            for (int x = 0; x < 14; x++)
+            {
+                for (int y = 0; y < 14; y++)
+                {
+                    Node isItAPill = null;
+                    isItAPill = gs.Map.GetNode(x, y);
+                    if (isItAPill.Type == Node.NodeType.Pill)
+                        numPellets++;
+                }
+            }
+            q3TotalPellets = numPellets;
+            numPellets = 0;
+
+            // quadrant 4
+            for (int x = 14; x < 28; x++)
+            {
+                for (int y = 0; y < 14; y++)
+                {
+                    Node isItAPill = null;
+                    isItAPill = gs.Map.GetNode(x, y);
+                    if (isItAPill.Type == Node.NodeType.Pill)
+                        numPellets++;
+                }
+            }
+            q4TotalPellets = numPellets;
+            numPellets = 0;
+
+        }
+
+        public int getAreaTotalPellets()
+        {
+            if (quadrant == 1) { return q1TotalPellets; }
+            else if (quadrant == 2) { return q2TotalPellets; }
+            else if (quadrant == 3) { return q3TotalPellets; }
+            else { return q4TotalPellets; }
+
+        }
+
         public double getDistance(int x1, int x2, int y1, int y2)
         {
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -80,6 +157,11 @@ namespace PacmanAI
         public override Direction Think(GameState gs)
         {
             quadrant = 0;
+
+            if (gs.Timer == 0) // may have to change this if the function can't work in time
+            {
+                initTotalPellets(gs);
+            }
 
             if (gs.Pacman.Node.X < gs.Pacman.Node.CenterX)
                 quadrant += 0;
@@ -107,7 +189,7 @@ namespace PacmanAI
             {
                 if (!itsAGhost)
                 {
-                    if (true) //*numPellets() < totalPellets * COMPLETION_PERCENTAGE)
+                    if (getNumPellets(gs) < (getAreaTotalPellets() * (1 - COMPLETION_PERCENTAGE))) // completion threshold reached
                     {
                         eatEmUp = false;
                         goGetTheGoddamnPowerPill = true;
