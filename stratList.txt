@@ -2,7 +2,6 @@ STRATEGY
 - parameters/magic numbers
 
 
-
 1. Full Mega Pac (Thingy)
 - personal space
 - completion percentage
