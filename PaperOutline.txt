@@ -1,0 +1,64 @@
+Your project should be written up as a report, which should be structured similarly to a scientific paper. This report should be handed in on May 17th midnight at the latest, by email to me (Julian). You should then prepare a short presentation (10-15 minutes) to be presented on the 19th.
+
+The report should be between five and seven pages long (you can include additional material in appendices, but I will most likely not read those). Below is a recommended layout for the report; under each section I have included some questions that should be answered within that section. You do not need to follow this structure, but you need to have equivalents of all the sections below somewhere in your report, and you need to answer all the questions posed there, to the extent this makes sense for your particular project.
+
+1. Introduction and problem statement
+What problem are you trying to solve? Why is this important? How does this problem make some sort of game better?
+-Design an optimum Ms PacMan AI that scores higher than all other AIs
+-It brings new methods and strategies to the table to solve a common game problem.
+
+2. Background
+Has this been done before? How? If not, what's the closest related research? (Both using similar approaches and other algorithms.) What's novel with your research?
+-This has been done before: mainly with PacMan vs Ghosts and this C# Ms PacMan framework we have chosen to use.  This framework has been used in several competitions and we have score results.  We will compare our various strats against each other, and against the competition results to see if we have created the best.  We want to have the best!
+-We are going to bring a series of new and unique strats/ideas when it comes to solving the problem of which AI is best
+
+3. Game design
+What's the design of the game you are going to use? Why do you need AI in this game?
+- Ms PacMan 
+http://www.cnet.com/news/artificial-intelligence-takes-on-ms-pac-man/
+
+
+4. Methods
+How does your algorithm work? Describe in as much detail as you can fit into the report. How did you interface it to the game?
+
+STRATEGY
+- parameters/magic numbers
+
+
+1. Full Mega Pac (Thingy)
+- personal space
+- completion percentage
+- general space
+
+2. Just Greedy, no quadrants 
+- personal space
+- general space
+
+3. "Out of Sight, Out of Mind"
+- personal space only
+
+4. Angry Mega Pac
+5. Angry Greedy Pac
+6. Angry OOSOOM PAC
+- same as 1,2,3 respectively, but add aggression when powered up
+
+5. Results
+Did it work? How well? Provide some numbers, preferably a figure and a table or two. 
+
+(Coming)
+
+6. Discussion
+What are the strengths and shortcomings of your method? How well would it generalize to other game genres? How would you develop it further, if you had time?
+
+(Coming)
+
+7. References
+You need to include at least 5 references, preferably academic papers. These may include some of the readings for the course, but the reference must make sense given the project you are doing. The formatting of the references should follow any of the standard academic reference formats.
+
+http://repository.essex.ac.uk/4112/1/PacmanVersusGhostTeam2011.pdf
+
+-Check Google Scholar
+
+FOR PRESENTATION:
+
+Run our separate AIs iteratively from the small ones to the combination ones from worst score to best.  Also run the better of the AIs that came with the framework to show what we competed against.  It was our motivation to do better!
