@@ -60,7 +60,7 @@ namespace Pacman.Simulator
 
 			// IMPORTANT SETTINGS AREA //
 			// try load controller
-			// tryLoadController("SmartDijkstraPac");			
+			tryLoadController("TestPac");			
 			// load stream
 			// tryLoadStream("best22030");
 			// start timer ( must always be the last to be started! )
