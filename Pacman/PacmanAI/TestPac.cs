@@ -34,6 +34,24 @@ namespace PacmanAI
         {
         }
 
+        public bool isInDeadZone(Node spot)
+        {
+            bool dead = false;
+            if (spot.Y < 23 && spot.Y > 8)
+            {
+                if (spot.Y < 18 && spot.Y > 9)
+                {
+                    if (spot.X > 8 && spot.X < 19) { return true; }
+                }
+                else
+                {
+                    if (spot.X > 3 && spot.X < 24) { return true; }
+                }
+            }
+
+            return dead;
+        }
+
         public int getNumPellets(GameState gs)
         {
             int numPellets = 0;
@@ -164,7 +182,7 @@ namespace PacmanAI
         {
             quadrant = 0;
 
-            if (gs.Timer == 0) // may have to change this if the function can't work in time
+            if (gs.Timer < 100) // may have to change this if the function can't work in time
             {
                 initTotalPellets(gs);
             }
