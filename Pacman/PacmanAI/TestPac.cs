@@ -236,10 +236,11 @@ namespace PacmanAI
                 {
                     if (node.Type == Node.NodeType.Pill)
                     {
-                        if (getDistance(gs.Pacman.Node.X, node.X, gs.Pacman.Node.Y, node.Y) < closest)
+                        //if (getDistance(gs.Pacman.Node.X, node.X, gs.Pacman.Node.Y, node.Y) < closest)
+                        if (gs.Pacman.Node.ShortestPath[node.X, node.Y].Distance < closest)
                         {
                             bestPath = gs.Pacman.Node.ShortestPath[node.X, node.Y];
-                            closest = getDistance(gs.Pacman.Node.X, node.X, gs.Pacman.Node.Y, node.Y);
+                            closest = bestPath.Distance;
                         }
                     }
                 }
