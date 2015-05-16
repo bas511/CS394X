@@ -28,3 +28,8 @@ C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialGitPacMan\Pacman\Sim
 C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialGitPacMan\Pacman\Simulator\obj\Debug\Simulator.csproj.GenerateResource.Cache
 C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\Simulator\obj\Debug\Pacman.Simulator.exe
 C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\Simulator\obj\Debug\Pacman.Simulator.pdb
+C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\Simulator\bin\Debug\Pacman.Simulator.exe
+C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\Simulator\bin\Debug\Pacman.Simulator.pdb
+C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\Simulator\obj\Debug\Simulator.csprojResolveAssemblyReference.cache
+C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\Simulator\obj\Debug\Pacman.Simulator.Visualizer.resources
+C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\Simulator\obj\Debug\Simulator.csproj.GenerateResource.Cache

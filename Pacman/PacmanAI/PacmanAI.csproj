@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Evolve.cs" />
     <Compile Include="RandomPac.cs" />
     <Compile Include="SmartDijkstraPac.cs" />
     <Compile Include="SmartPac.cs" />

@@ -17,3 +17,5 @@ C:\Users\Brandon\Documents\College\NYU\Spring2015\CS394X\PacPaper\Pacman\MsPacma
 C:\Users\Brandon\Documents\College\NYU\Spring2015\CS394X\PacPaper\Pacman\PacmanAI\obj\Debug\PacmanAI.csprojResolveAssemblyReference.cache
 C:\Users\Brandon\Documents\College\NYU\Spring2015\CS394X\PacPaper\Pacman\PacmanAI\obj\Debug\PacmanAI.dll
 C:\Users\Brandon\Documents\College\NYU\Spring2015\CS394X\PacPaper\Pacman\PacmanAI\obj\Debug\PacmanAI.pdb
+C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\PacmanAI\obj\Debug\PacmanAI.csprojResolveAssemblyReference.cache
+C:\Users\Julian\Documents\PolySpring2015\AIforGames\OfficialPac\Pacman\PacmanAI\obj\Debug\PacmanAI.dll
