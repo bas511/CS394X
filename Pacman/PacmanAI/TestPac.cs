@@ -87,6 +87,81 @@ namespace PacmanAI
         public void initTotalPellets(GameState gs)
         {
             int numPellets = 0;
+
+            // debugging I found some weird values for centerX and centerY. I'm hard-coding
+            // the values into the loop now, but we can change the values later
+
+            // using quadrant assignments: 1-lowerleft, 2-lowerright, 3-upperleft, 4-upperright
+            // coordinates are RIGHT-DOWN
+
+            //quadrant 1
+            foreach (Node node in gs.Map.Nodes)
+            {
+                if (node.Type == Node.NodeType.Pill)
+                {
+                    if (node.X > 0 && node.X < 15)
+                    {
+                        if (node.Y > 15 && node.Y < 30)
+                        {
+                            numPellets++;
+                        }
+                    }
+                }
+            }
+            q1TotalPellets = numPellets;
+            numPellets = 0;
+
+            //quadrant 2
+            foreach (Node node in gs.Map.Nodes)
+            {
+                if (node.Type == Node.NodeType.Pill)
+                {
+                    if (node.X >= 15 && node.X < 27)
+                    {
+                        if (node.Y > 15 && node.Y < 30)
+                        {
+                            numPellets++;
+                        }
+                    }
+                }
+            }
+            q2TotalPellets = numPellets;
+            numPellets = 0;
+
+            //quadrant 3
+            foreach (Node node in gs.Map.Nodes)
+            {
+                if (node.Type == Node.NodeType.Pill)
+                {
+                    if (node.X > 0 && node.X < 15)
+                    {
+                        if (node.Y > 0 && node.Y <= 15)
+                        {
+                            numPellets++;
+                        }
+                    }
+                }
+            }
+            q3TotalPellets = numPellets;
+            numPellets = 0;
+
+            //quadrant 4
+            foreach (Node node in gs.Map.Nodes)
+            {
+                if (node.Type == Node.NodeType.Pill)
+                {
+                    if (node.X >= 15 && node.X < 27)
+                    {
+                        if (node.Y > 0 && node.Y <= 15)
+                        {
+                            numPellets++;
+                        }
+                    }
+                }
+            }
+            q4TotalPellets = numPellets;
+            numPellets = 0;
+
             // debugging I found some weird values for centerX and centerY. I'm hard-coding
             // the values into the loop now, but we can change the values later
 
@@ -94,60 +169,62 @@ namespace PacmanAI
             // coordinates are RIGHT-DOWN
 
             // quadrant 1
-            for (int x = 0; x < gs.Pacman.Node.CenterX; x++)
-            {
-                for (int y = gs.Pacman.Node.CenterY; y < 31; y++)
-                {
-                    Node isItAPill = null;
-                    isItAPill = gs.Map.GetNode(x, y);
-                    if (isItAPill.Type == Node.NodeType.Pill)
-                        numPellets++;
-                }
-            }
-            q1TotalPellets = numPellets;
-            numPellets = 0;
 
-            // quadrant 2
-            for (int x = gs.Pacman.Node.CenterX; x < 28; x++)
-            {
-                for (int y = gs.Pacman.Node.CenterY; y < 31; y++)
-                {
-                    Node isItAPill = null;
-                    isItAPill = gs.Map.GetNode(x, y);
-                    if (isItAPill.Type == Node.NodeType.Pill)
-                        numPellets++;
-                }
-            }
-            q2TotalPellets = numPellets;
-            numPellets = 0;
 
-            // quadrant 3
-            for (int x = 0; x < gs.Pacman.Node.CenterX; x++)
-            {
-                for (int y = 0; y < gs.Pacman.Node.CenterY; y++)
-                {
-                    Node isItAPill = null;
-                    isItAPill = gs.Map.GetNode(x, y);
-                    if (isItAPill.Type == Node.NodeType.Pill)
-                        numPellets++;
-                }
-            }
-            q3TotalPellets = numPellets;
-            numPellets = 0;
+            //for (int x = 0; x < gs.Pacman.Node.CenterX; x++)
+            //{
+            //    for (int y = gs.Pacman.Node.CenterY; y < 220; y++)
+            //    {
+            //        Node isItAPill = null;
+            //        isItAPill = gs.Map.GetNode(x, y);
+            //        if (isItAPill.Type == Node.NodeType.Pill)
+            //            numPellets++;
+            //    }
+            //}
+            //q1TotalPellets = numPellets;
+            //numPellets = 0;
 
-            // quadrant 4
-            for (int x = gs.Pacman.Node.CenterX; x < 28; x++)
-            {
-                for (int y = 0; y < gs.Pacman.Node.CenterY; y++)
-                {
-                    Node isItAPill = null;
-                    isItAPill = gs.Map.GetNode(x, y);
-                    if (isItAPill.Type == Node.NodeType.Pill)
-                        numPellets++;
-                }
-            }
-            q4TotalPellets = numPellets;
-            numPellets = 0;
+            //// quadrant 2
+            //for (int x = gs.Pacman.Node.CenterX; x < 28; x++)
+            //{
+            //    for (int y = gs.Pacman.Node.CenterY; y < 378; y++)
+            //    {
+            //        Node isItAPill = null;
+            //        isItAPill = gs.Map.GetNode(x, y);
+            //        if (isItAPill.Type == Node.NodeType.Pill)
+            //            numPellets++;
+            //    }
+            //}
+            //q2TotalPellets = numPellets;
+            //numPellets = 0;
+
+            //// quadrant 3
+            //for (int x = 0; x < gs.Pacman.Node.CenterX; x++)
+            //{
+            //    for (int y = 0; y < gs.Pacman.Node.CenterY; y++)
+            //    {
+            //        Node isItAPill = null;
+            //        isItAPill = gs.Map.GetNode(x, y);
+            //        if (isItAPill.Type == Node.NodeType.Pill)
+            //            numPellets++;
+            //    }
+            //}
+            //q3TotalPellets = numPellets;
+            //numPellets = 0;
+
+            //// quadrant 4
+            //for (int x = gs.Pacman.Node.CenterX; x < 28; x++)
+            //{
+            //    for (int y = 0; y < gs.Pacman.Node.CenterY; y++)
+            //    {
+            //        Node isItAPill = null;
+            //        isItAPill = gs.Map.GetNode(x, y);
+            //        if (isItAPill.Type == Node.NodeType.Pill)
+            //            numPellets++;
+            //    }
+            //}
+            //q4TotalPellets = numPellets;
+            //numPellets = 0;
 
         }
 
@@ -237,7 +314,7 @@ namespace PacmanAI
                     if (node.Type == Node.NodeType.Pill)
                     {
                         //if (getDistance(gs.Pacman.Node.X, node.X, gs.Pacman.Node.Y, node.Y) < closest)
-                        if (gs.Pacman.Node.ShortestPath[node.X, node.Y].Distance < closest)
+                        if (gs.Pacman.Node.ShortestPath[node.X, node.Y].Distance < closest && !isInDeadZone(node))
                         {
                             bestPath = gs.Pacman.Node.ShortestPath[node.X, node.Y];
                             closest = bestPath.Distance;
