@@ -3,347 +3,461 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
 using Pacman.Simulator;
 using Pacman.Simulator.Ghosts;
-
 
 namespace PacmanAI
 {
     public class TestPac : BasePacman
     {
+
+        public TestPac() : base("TestPac") { }
+
+        private const bool debug = false;
         bool eatEmUp = true;
         bool goGetTheGoddamnPowerPill = false;
         bool makeLikeATreeAndGetOuttaHere = false;
         bool itsAGhost = false;
 
-        int quadrant = 0;
-        int q1TotalPellets, q2TotalPellets, q3TotalPellets, q4TotalPellets;
-
-        // MAGIC NUMBERS
-        int TIME_THRESHOLD = 400;
-        double PERSONAL_SPACE = 200; // I have no idea if this is even a value
-        double COMPLETION_PERCENTAGE = 5;
-
-        private const bool debug = false;
-
-        public TestPac()
-            : base("TestPac")
-        {
-        }
-
-        public bool isInDeadZone(Node spot)
-        {
-            bool dead = false;
-            if (spot.Y < 23 && spot.Y > 8)
-            {
-                if (spot.Y < 18 && spot.Y > 9)
-                {
-                    if (spot.X > 8 && spot.X < 19) { return true; }
-                }
-                else
-                {
-                    if (spot.X > 3 && spot.X < 24) { return true; }
-                }
-            }
-
-            return dead;
-        }
-
-        public int getNumPellets(GameState gs)
-        {
-            int numPellets = 0;
-            int leftSide = 0;
-            int bottomSide = 0;
-
-            if (gs.Pacman.Node.X < gs.Pacman.Node.CenterX)
-                leftSide = 1;
-
-            if (gs.Pacman.Node.Y < gs.Pacman.Node.CenterY)
-                bottomSide = 1;
-
-            //Make starting xpos equal to 0 if on left side and equal to the midpoint if on right
-            //run until xpos equals center if on left side and right edge if on right
-            for (int xpos = gs.Pacman.Node.CenterX * Math.Abs(1 - leftSide); xpos < 28 - gs.Pacman.Node.CenterX * leftSide; xpos++)
-            {
-                //Make starting ypos equal to 0 if on bottom half and equal to the midpoint if on top
-                //run until ypos equals center if on bottom half and top edge if on top
-                for (int ypos = gs.Pacman.Node.CenterY * Math.Abs(1 - bottomSide); ypos < 28 - gs.Pacman.Node.CenterY * bottomSide; ypos++)
-                {
-                    //Check each node and add it to the total pellet count if need be
-                    Node isItAPill = null;
-                    isItAPill = gs.Map.GetNode(xpos, ypos);
-                    if (isItAPill.Type == Node.NodeType.Pill)
-                        numPellets++;
-                }
-            }
-            Console.WriteLine(numPellets);
-            return numPellets;
-
-        }
-
-        public void initTotalPellets(GameState gs)
-        {
-            int numPellets = 0;
-
-            // debugging I found some weird values for centerX and centerY. I'm hard-coding
-            // the values into the loop now, but we can change the values later
-
-            // using quadrant assignments: 1-lowerleft, 2-lowerright, 3-upperleft, 4-upperright
-            // coordinates are RIGHT-DOWN
-
-            //quadrant 1
-            foreach (Node node in gs.Map.Nodes)
-            {
-                if (node.Type == Node.NodeType.Pill)
-                {
-                    if (node.X > 0 && node.X < 15)
-                    {
-                        if (node.Y > 15 && node.Y < 30)
-                        {
-                            numPellets++;
-                        }
-                    }
-                }
-            }
-            q1TotalPellets = numPellets;
-            numPellets = 0;
-
-            //quadrant 2
-            foreach (Node node in gs.Map.Nodes)
-            {
-                if (node.Type == Node.NodeType.Pill)
-                {
-                    if (node.X >= 15 && node.X < 27)
-                    {
-                        if (node.Y > 15 && node.Y < 30)
-                        {
-                            numPellets++;
-                        }
-                    }
-                }
-            }
-            q2TotalPellets = numPellets;
-            numPellets = 0;
-
-            //quadrant 3
-            foreach (Node node in gs.Map.Nodes)
-            {
-                if (node.Type == Node.NodeType.Pill)
-                {
-                    if (node.X > 0 && node.X < 15)
-                    {
-                        if (node.Y > 0 && node.Y <= 15)
-                        {
-                            numPellets++;
-                        }
-                    }
-                }
-            }
-            q3TotalPellets = numPellets;
-            numPellets = 0;
-
-            //quadrant 4
-            foreach (Node node in gs.Map.Nodes)
-            {
-                if (node.Type == Node.NodeType.Pill)
-                {
-                    if (node.X >= 15 && node.X < 27)
-                    {
-                        if (node.Y > 0 && node.Y <= 15)
-                        {
-                            numPellets++;
-                        }
-                    }
-                }
-            }
-            q4TotalPellets = numPellets;
-            numPellets = 0;
-
-            // debugging I found some weird values for centerX and centerY. I'm hard-coding
-            // the values into the loop now, but we can change the values later
-
-            // using quadrant assignments: 1-lowerleft, 2-lowerright, 3-upperleft, 4-upperright
-            // coordinates are RIGHT-DOWN
-
-            // quadrant 1
-
-
-            //for (int x = 0; x < gs.Pacman.Node.CenterX; x++)
-            //{
-            //    for (int y = gs.Pacman.Node.CenterY; y < 220; y++)
-            //    {
-            //        Node isItAPill = null;
-            //        isItAPill = gs.Map.GetNode(x, y);
-            //        if (isItAPill.Type == Node.NodeType.Pill)
-            //            numPellets++;
-            //    }
-            //}
-            //q1TotalPellets = numPellets;
-            //numPellets = 0;
-
-            //// quadrant 2
-            //for (int x = gs.Pacman.Node.CenterX; x < 28; x++)
-            //{
-            //    for (int y = gs.Pacman.Node.CenterY; y < 378; y++)
-            //    {
-            //        Node isItAPill = null;
-            //        isItAPill = gs.Map.GetNode(x, y);
-            //        if (isItAPill.Type == Node.NodeType.Pill)
-            //            numPellets++;
-            //    }
-            //}
-            //q2TotalPellets = numPellets;
-            //numPellets = 0;
-
-            //// quadrant 3
-            //for (int x = 0; x < gs.Pacman.Node.CenterX; x++)
-            //{
-            //    for (int y = 0; y < gs.Pacman.Node.CenterY; y++)
-            //    {
-            //        Node isItAPill = null;
-            //        isItAPill = gs.Map.GetNode(x, y);
-            //        if (isItAPill.Type == Node.NodeType.Pill)
-            //            numPellets++;
-            //    }
-            //}
-            //q3TotalPellets = numPellets;
-            //numPellets = 0;
-
-            //// quadrant 4
-            //for (int x = gs.Pacman.Node.CenterX; x < 28; x++)
-            //{
-            //    for (int y = 0; y < gs.Pacman.Node.CenterY; y++)
-            //    {
-            //        Node isItAPill = null;
-            //        isItAPill = gs.Map.GetNode(x, y);
-            //        if (isItAPill.Type == Node.NodeType.Pill)
-            //            numPellets++;
-            //    }
-            //}
-            //q4TotalPellets = numPellets;
-            //numPellets = 0;
-
-        }
-
-        public int getAreaTotalPellets()
-        {
-            if (quadrant == 1) { return q1TotalPellets; }
-            else if (quadrant == 2) { return q2TotalPellets; }
-            else if (quadrant == 3) { return q3TotalPellets; }
-            else { return q4TotalPellets; }
-
-        }
-
-        public double getDistance(int x1, int x2, int y1, int y2)
-        {
-            return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        }
-
-        public bool areThingsNormal(GameState gs)
-        {
-            bool normal = true;
-            foreach (Pacman.Simulator.Ghosts.Ghost ghost in gs.Ghosts)
-            {
-                if (ghost.Chasing && ghost.Entered && ghost.RemainingFlee > TIME_THRESHOLD)
-                {
-                    normal = false;
-                }
-            }
-            return normal;
-        }
-
         public override Direction Think(GameState gs)
         {
-            quadrant = 0;
 
-            if (gs.Timer < 100) // may have to change this if the function can't work in time
+            bool chased = false;
+            foreach (Ghost ghost in gs.Ghosts)
             {
-                initTotalPellets(gs);
-            }
-
-            if (gs.Pacman.Node.X < gs.Pacman.Node.CenterX)
-                quadrant += 0;
-            else
-                quadrant += 1;
-
-            if (gs.Pacman.Node.Y < gs.Pacman.Node.CenterY)
-                quadrant += 1;
-            else
-                quadrant += 3;
-
-            //This determines if there are any ghosts within pacman's space
-            foreach (Pacman.Simulator.Ghosts.Ghost ghost in gs.Ghosts)
-            {
-                if (getDistance(gs.Pacman.Node.X, ghost.X, gs.Pacman.Node.Y, ghost.Y) < PERSONAL_SPACE)
+                if (ghost.Node == null || !ghost.Chasing || !ghost.Entered)
                 {
-                    if (ghost.Entered && ghost.Chasing)
-                    {
-                        itsAGhost = true;
-                    }
+                    continue;
                 }
-            }
-
-            if (areThingsNormal(gs))
-            {
-                if (!itsAGhost)
+                Node.PathInfo path = ghost.Node.ShortestPath[gs.Pacman.Node.X, gs.Pacman.Node.Y];
+                if (path != null && path.Distance < 6 && path.Direction == ghost.Direction)
                 {
-                    if (getNumPellets(gs) < (getAreaTotalPellets() * (1 - COMPLETION_PERCENTAGE))) // completion threshold reached
-                    {
-                        eatEmUp = false;
-                        goGetTheGoddamnPowerPill = true;
-                    }
-                    if (getNumPellets(gs) == 0)
-                    {
-                        makeLikeATreeAndGetOuttaHere = true;
-                    }
+                    chased = true;
+                    goGetTheGoddamnPowerPill = true;
                 }
                 else
-                    makeLikeATreeAndGetOuttaHere = true;
-            }
-
-            if (eatEmUp)
-            {
-                Node.PathInfo bestPath = null;
-                double closest = Double.PositiveInfinity;
-                //implement greedy strat
-                foreach (Node node in gs.Map.Nodes)
                 {
-                    if (node.Type == Node.NodeType.Pill)
-                    {
-                        //if (getDistance(gs.Pacman.Node.X, node.X, gs.Pacman.Node.Y, node.Y) < closest)
-                        if (gs.Pacman.Node.ShortestPath[node.X, node.Y].Distance < closest && !isInDeadZone(node))
-                        {
-                            bestPath = gs.Pacman.Node.ShortestPath[node.X, node.Y];
-                            closest = bestPath.Distance;
-                        }
-                    }
+                    eatEmUp = true;
                 }
-                return bestPath.Direction;
             }
-
+            // powerpill taker
             if (goGetTheGoddamnPowerPill)
             {
-                Double closestPower = Double.PositiveInfinity;
-                Node.PathInfo bestPower = null;
-                //self explanatory
                 foreach (Node node in gs.Map.Nodes)
                 {
                     if (node.Type == Node.NodeType.PowerPill)
                     {
-                        if (getDistance(gs.Pacman.Node.X, node.X, gs.Pacman.Node.Y, node.Y) < closestPower)
+                        Node.PathInfo path = gs.Pacman.Node.ShortestPath[node.X, node.Y];
+                        if (path != null)
                         {
-                            bestPower = gs.Pacman.Node.ShortestPath[node.X, node.Y];
-                            closestPower = getDistance(gs.Pacman.Node.X, node.X, gs.Pacman.Node.Y, node.Y);
+                            if (path.Distance < 3 || (chased && path.Distance < 7))
+                            {
+                                return path.Direction;
+                            }
                         }
                     }
                 }
-                return bestPower.Direction;
+            }
+            // danger
+            double[] dist = { Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity };
+            // calculate danger for each direction
+            foreach (Ghost ghost in gs.Ghosts)
+            {
+                if (ghost.Node == null)
+                {
+                    continue;
+                }
+                if (ghost.Node.IsSame(gs.Pacman.Node) && gs.Pacman.PossibleDirection(gs.Pacman.Direction))
+                {
+                    return gs.Pacman.Direction;
+                }
+                Node.PathInfo path = gs.Pacman.Node.ShortestPath[ghost.Node.X, ghost.Node.Y];
+                if (path != null)
+                {
+                    if ((ghost.Node.ShortestPath[gs.Pacman.Node.X, gs.Pacman.Node.Y].Direction != ghost.InverseDirection(ghost.Direction) || path.Distance < 2) && // heading towards pacman
+                        path.Distance < dist[(int)path.Direction] &&
+                        path.Distance < 4 && // magic number
+                        (ghost.Chasing || ghost.RemainingFlee < 200 || ghost.Entering))
+                    {
+                        dist[(int)path.Direction] = path.Distance;
+                    }
+                }
+            }
+            // calculate best
+            List<Direction> possibleDirections = new List<Direction>();
+            for (int i = 0; i < dist.Length; i++)
+            {
+                if (gs.Pacman.PossibleDirection((Direction)i) && dist[i] == Double.PositiveInfinity)
+                {
+                    possibleDirections.Add((Direction)i);
+                }
+            }
+            // 0 => choose least dangerous // still needs more intelligence
+            if (possibleDirections.Count == 0)
+            {
+                Direction bestDirection = Direction.None;
+                double bestDistance = 0.0;
+                for (int i = 0; i < dist.Length; i++)
+                {
+                    if (gs.Pacman.PossibleDirection((Direction)i) && dist[i] > bestDistance)
+                    {
+                        bestDirection = (Direction)i;
+                        bestDistance = dist[i];
+                    }
+                }
+                if (debug) Console.WriteLine("0 options: " + bestDirection);
+                return bestDirection;
+            }
+            // 1 => choose just that
+            else if (possibleDirections.Count == 1)
+            {
+                if (debug) Console.WriteLine("1 option: " + possibleDirections[0]);
+                return possibleDirections[0];
+            }
+            // 2+ => choose ... ?
+            else
+            {
+                if (debug) Console.Write(possibleDirections.Count + " options: ");
+                if (debug) foreach (Direction d in possibleDirections) Console.Write(d + ", ");
+                if (debug) Console.WriteLine("");
+                Node.PathInfo bestPath = null;
+                Node bestNode = null;
+                // dijkstra avoidance
+                StateInfo.PillPath avoidancePoint = null;
+                LinkedList<DistanceNode> possibles;
+                Prediction prediction = new Prediction(gs, 7);
+                // find new target (pill furthest away)			
+                StateInfo.PillPath pillPath = StateInfo.FurthestPill(gs.Pacman.Node, gs);
+                if (pillPath.PathInfo != null)
+                {
+                    avoidancePoint = pillPath; // maybe nearest powerpill (if exists) would be a good target?
+                }
+                List<DirectionDanger> directionDangers = new List<DirectionDanger>();
+                if (avoidancePoint != null)
+                {
+                    // run dijkstra to find path							
+                    foreach (Direction d in gs.Pacman.PossibleDirections())
+                    {
+                        // find best direction
+                        Direction bestDirection = Direction.None;
+                        float shortestRoute = float.MaxValue;
+                        int longestTime = int.MaxValue;
+                        possibles = new LinkedList<DistanceNode>();
+                        possibles.AddFirst(new LinkedListNode<DistanceNode>(new DistanceNode(gs.Pacman.Node.GetNode(d), 0.0f, d, 1)));
+                        while (possibles.Count > 0)
+                        {
+                            // find next lowest node
+                            DistanceNode node = possibles.First.Value;
+                            // found node
+                            if (node.Node == avoidancePoint.Target)
+                            {
+                                if (node.Distance < shortestRoute)
+                                {
+                                    shortestRoute = node.Distance;
+                                    longestTime = node.Time;
+                                    bestDirection = d;
+                                }
+                                break;
+                            }
+                            // pop node
+                            possibles.Remove(node);
+                            // add adjacents
+                            foreach (Node gn in node.Node.GhostPossibles[(int)node.Direction])
+                            {
+                                // find danger
+                                float danger = 0.0f;
+                                if (node.Time < prediction.Iterations - 1)
+                                {
+                                    danger = prediction.DangerMaps[node.Time + 1].Danger[node.Node.X, node.Node.Y] +
+                                                prediction.DangerMaps[node.Time + 1].Danger[gn.X, gn.Y];
+                                    if (danger > 1.0f)
+                                    {
+                                        danger = 1.0f;
+                                    }
+                                }
+                                // create new node
+                                DistanceNode newNode = new DistanceNode(gn, node.Distance + danger, node.Node.GetDirection(gn), node.Time + 1);
+                                // past iterations
+                                if (newNode.Time > prediction.Iterations || gn.Type == Node.NodeType.PowerPill || newNode.Distance == 1.0)
+                                {
+                                    if (newNode.Distance < shortestRoute || (newNode.Distance == shortestRoute && newNode.Time > longestTime))
+                                    {
+                                        shortestRoute = newNode.Distance;
+                                        longestTime = newNode.Time;
+                                        bestDirection = d;
+                                    }
+                                    continue;
+                                }
+                                LinkedListNode<DistanceNode> curNode = possibles.First;
+                                while (curNode != null && curNode.Value.Distance < newNode.Distance)
+                                {
+                                    curNode = curNode.Next;
+                                }
+                                if (curNode == null)
+                                {
+                                    possibles.AddLast(newNode);
+                                }
+                                else
+                                {
+                                    possibles.AddAfter(curNode, newNode);
+                                }
+                            }
+                        }
+                        directionDangers.Add(new DirectionDanger(d, shortestRoute));
+                    }
+                }
+                if (directionDangers.Count > 0)
+                {
+                    List<Direction> newPossibleDirections = new List<Direction>();
+                    directionDangers.Sort(new Comparison<DirectionDanger>(delegate(DirectionDanger dd1, DirectionDanger dd2)
+                    {
+                        if (dd1.Danger == dd2.Danger) return 0;
+                        if (dd1.Danger > dd2.Danger) return 1;
+                        return -1;
+                    }));
+                    foreach (Direction possible in possibleDirections)
+                    {
+                        foreach (DirectionDanger dd in directionDangers)
+                        {
+                            if (dd.Direction == possible)
+                            {
+                                if (dd.Danger < 0.2)
+                                {
+                                    newPossibleDirections.Add(possible);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if (newPossibleDirections.Count == 1)
+                    {
+                        return newPossibleDirections[0];
+                    }
+                    // 0 - return previous best
+                    if (newPossibleDirections.Count == 0)
+                    {
+                        foreach (DirectionDanger dd in directionDangers)
+                        {
+                            foreach (Direction possible in possibleDirections)
+                            {
+                                if (dd.Direction == possible)
+                                {
+                                    return possible;
+                                }
+                            }
+                        }
+                    }
+                    possibleDirections = newPossibleDirections;
+                }
+                // hunt ghosts
+                foreach (Ghost ghost in gs.Ghosts)
+                {
+                    if (ghost.Node == null || ghost.Chasing || !ghost.Entered)
+                    {
+                        continue;
+                    }
+                    Node.PathInfo ghostPath = ghost.Node.ShortestPath[gs.Pacman.Node.X, gs.Pacman.Node.Y];
+                    Node.PathInfo path = gs.Pacman.Node.ShortestPath[ghost.Node.X, ghost.Node.Y];
+                    if (path != null && (path.Distance < 4 || (path.Distance < 7 && ghostPath.Direction == ghost.Direction)))
+                    {
+                        if (bestPath == null || path.Distance < bestPath.Distance)
+                        {
+                            bestPath = path;
+                        }
+                    }
+                }
+                // hunt pills
+                if (eatEmUp == true)
+                {
+                    if (bestPath == null)
+                    {
+                        foreach (Node node in gs.Map.Nodes)
+                        {
+                            if (node.Type != Node.NodeType.Wall)
+                            {
+                                if (node.Type == Node.NodeType.Pill)
+                                {
+                                    Node.PathInfo curPath = gs.Pacman.Node.ShortestPath[node.X, node.Y];
+                                    if (curPath != null)
+                                    {
+                                        curPath = curPath.Clone();
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                    if (curPath.Direction == gs.Pacman.InverseDirection(gs.Pacman.Direction))
+                                    {
+                                        curPath = new Node.PathInfo(curPath.Direction, curPath.Distance + 10);
+                                    }
+                                    List<Node> route = gs.Map.GetRoute(gs.Pacman.Node, node);
+                                    foreach (Node routeNode in route)
+                                    {
+                                        if (routeNode.X == 0 && gs.Map.Tunnels[routeNode.Y])
+                                        {
+                                            curPath = new Node.PathInfo(curPath.Direction, curPath.Distance - 15);
+                                            break;
+                                        }
+                                    }
+                                    if (curPath != null && (bestPath == null || curPath.Distance <= bestPath.Distance))
+                                    {
+                                        foreach (Direction d in possibleDirections)
+                                        {
+                                            if (d == curPath.Direction)
+                                            {
+                                                //if( bestPath == null || curPath.Distance < bestPath.Distance || (bestPath.Distance == curPath.Distance && GameState.Random.NextDouble() < 0.5) ) {
+                                                bestNode = node;
+                                                bestPath = curPath;
+                                                if (debug) Console.WriteLine("best pill: " + bestPath.Direction);
+                                                break;
+                                                //}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                // return if found
+                if (bestPath != null)
+                {
+                    if (debug) Console.WriteLine("best: " + bestPath.Direction);
+                    return bestPath.Direction;
+                }
+                // follow same direction if it is in possibles
+                foreach (Direction d in possibleDirections)
+                {
+                    if (d == gs.Pacman.Direction)
+                    {
+                        if (debug) Console.WriteLine("follow direction: " + d);
+                        return d;
+                    }
+                }
+                // otherwise choose randomly (?)
+                int chosen = GameState.Random.Next(0, possibleDirections.Count - 1);
+                if (debug) Console.WriteLine("random: " + possibleDirections[chosen]);
+                return possibleDirections[chosen];
+            }
+        }
+
+        public class DirectionDanger
+        {
+            public readonly Direction Direction;
+            public readonly float Danger;
+
+            public DirectionDanger(Direction direction, float danger)
+            {
+                this.Direction = direction;
+                this.Danger = danger;
+            }
+        }
+
+        public class DistanceNode
+        {
+            public readonly Node Node;
+            public readonly float Distance;
+            public readonly Direction Direction;
+            public readonly int Time;
+
+            public DistanceNode(Node node, float distance, Direction direction, int time)
+            {
+                this.Node = node;
+                this.Distance = distance;
+                if (this.Distance > 1.0f)
+                {
+                    this.Distance = 1.0f;
+                }
+                this.Direction = direction;
+                this.Time = time;
+            }
+        }
+
+        public class Sector
+        {
+            public static GameState GameState;
+            private static int indexCount = 0;
+            public readonly int Index;
+            public readonly int X;
+            public readonly int Y;
+            public readonly int Width;
+            public readonly int Height;
+            public int TargetX;
+            public int TargetY;
+            private double danger = 0;
+            public double Danger
+            {
+                get { return danger; }
+                set { danger = value; }
+            }
+            private int nodes;
+
+            private Sector(int x, int y, int width, int height)
+            {
+                this.X = x;
+                this.Y = y;
+                this.Width = width;
+                this.Height = height;
+                this.nodes = 0;
+                for (int mx = x; mx < x + width; mx++)
+                {
+                    for (int my = y; my < y + height; my++)
+                    {
+                        if (GameState.Map.Nodes[mx, my].Walkable)
+                        {
+                            this.nodes++;
+                        }
+                    }
+                }
+                TargetX = x + (int)Math.Round(width / 2f);
+                TargetY = y + (int)Math.Round(height / 2f);
+                Index = indexCount++;
+                string file = "sector" + Index + ".nn";
             }
 
-            return Direction.None;
+            public double[] GetDangerInputs()
+            {
+                double[] inputs = new double[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    Ghost ghost = GameState.Ghosts[i];
+                    inputs[i] = (int)Math.Abs(TargetX - ghost.Node.X) + (int)Math.Abs(TargetY - ghost.Node.Y);
+                    inputs[i] = inputs[i] / 40.0;
+                }
+                return inputs;
+            }
+
+            public double GetDanger()
+            {
+                return danger;
+            }
+
+            public static Sector GetSector(int x, int y, int width, int height)
+            {
+                return new Sector(x, y, width, height);
+            }
+
+            public static Sector Contains(List<Sector> sectors, Node n)
+            {
+                foreach (Sector sector in sectors)
+                {
+                    if (sector.Contains(n))
+                    {
+                        return sector;
+                    }
+                }
+                return null;
+            }
+
+            public bool Contains(Node n)
+            {
+                return (n.X >= X && n.X <= X + Width && n.Y >= Y && n.Y <= Y + Height);
+            }
+
+            public double GetNormalizedDanger()
+            {
+                return danger / nodes;
+            }
         }
     }
 }
